@@ -6,7 +6,7 @@ The endpoint to hit for local testing is `http://localhost:8000/{user_id}`.
 ### Request Parameters
 Parameter | Type | Required | Description
 --- | --- | --- | --- 
-user_id | `integer` | Yes | Ther user's ID
+user_id | `integer` | Yes | The user's ID
 
 
 Sample return payload:
@@ -36,4 +36,5 @@ To run the tests, exec `bundle exec rspec` from the CLI.
 
 ### Next Steps
 - Build out test suite further
-- Investigate running separate HTTP REST API calls in parallel, although this would bring into question whether we want to display any data if one of the calls fails, but the others succeed. As with all things in life, tradeoffs are inevitable.
+- Investigate running separate [HTTP REST API calls in parallel](https://github.com/lostisland/faraday/wiki/Parallel-requests#making-parallel-http-requests), although this would bring into question whether we want to display any data if one of the calls fails, but the others succeed. As with all things in life, tradeoffs are inevitable.
+- Investigate incorporating the `faraday-net_http_persistent` gem. Would allow reuse of tcp connections.

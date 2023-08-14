@@ -11,48 +11,43 @@ class ExternalApiService
       }
     }
     @conn = Faraday.new(**faraday_options) do |config|
-      # config.response :raise_error
       config.response :logger,
         Rails.logger,
-        headers: true,
-        bodies: true,
         log_level: :debug
-    end
-
-    # custom ports for non-docker local testing
-    if ENV["TEST_ENV"] == "localhost"
-      @calendar_service_port = 7777
-      @user_service_port = 8000
-      @billing_service_port = 8881
     end
   end
 
   def query_user_service(user_id)
-    url = if ENV["TEST_ENV"] != "localhost"
-      "http://user-service:8000/users/#{user_id}"
-    else
-      "http://localhost:#{@user_service_port}/users/#{user_id}"
-    end
+    Rails.logger.info("starting call to user service")
+    url = "http://user-service:8000/users/#{user_id}"
+    response = @conn.get(url)
+    [response.status, JSON.parse(response.body)]
+  end
+
+  def query_user_is_admin_service(user_id)
+    Rails.logger.info("starting call to user service for is_admin check")
+    url = "http://user-service:8000/is_admin/#{user_id}"
+    response = @conn.get(url)
+    [response.status, JSON.parse(response.body)]
+  end
+
+  def query_user_admin_service(user_id)
+    Rails.logger.info("starting call to user service for admin user-list endpoint")
+    url = "http://user-service:8000/admin/#{user_id}"
     response = @conn.get(url)
     [response.status, JSON.parse(response.body)]
   end
 
   def query_calendar_service(user_id)
-    url = if ENV["TEST_ENV"] != "localhost"
-      "http://calendar-service:8000/events?user_id=#{user_id}"
-    else
-      "http://localhost:#{@calendar_service_port}/events?user_id=#{user_id}"
-    end
+    Rails.logger.info("starting call to calendar service")
+    url = "http://calendar-service:8000/events?user_id=#{user_id}"
     response = @conn.get(url)
     [response.status, JSON.parse(response.body)]
   end
 
   def query_billing_service(user_id)
-    url = if ENV["TEST_ENV"] != "localhost"
-      "http://billing-service:8000/subscriptions?user_id=#{user_id}"
-    else
-      "http://localhost:#{@billing_service_port}/subscriptions?user_id=#{user_id}"
-    end
+    Rails.logger.info("starting call to billing service")
+    url = "http://billing-service:8000/subscriptions?user_id=#{user_id}"
     response = @conn.get(url)
     [response.status, JSON.parse(response.body)]
   end
