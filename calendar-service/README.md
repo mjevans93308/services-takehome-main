@@ -2,6 +2,10 @@
 
 ## Calendar (Node / Express)
 This service contains information about a users upcoming meetings.
+
+Run with custom port:
+
+`$ PORT=7777 node app.js`
  
 ### Events Endpoint
 
