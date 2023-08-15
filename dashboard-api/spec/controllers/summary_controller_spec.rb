@@ -41,7 +41,8 @@ RSpec.describe SummaryController, type: :controller do
 end
 
 RSpec.describe SummaryController, type: :controller do
-  billing_service_return = "{\"user_id\": 1, \"renewal_date\": \"09/13/2023\", \"price_cents\": 1500}"
+  renewal_date = (Date.today + 30).strftime("%m/%d/%Y")
+  billing_service_return = "{\"user_id\": 1, \"renewal_date\": \"#{renewal_date}\", \"price_cents\": 1500}"
   summary_controller = SummaryController.new
   describe "GET #fetch_billing_info" do
     it "returns the details of the user's subscription, namely: subscription renewal date and cost" do

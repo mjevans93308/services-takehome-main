@@ -5,4 +5,5 @@ Rails.application.routes.draw do
   # root "articles#index"
 
   get 'summary/:user_id', to: 'summary#show'
+  get 'timezone/', to: 'summary#timezone_conversion'
 end

@@ -1,6 +1,9 @@
 require "uri"
 require "net/http"
 require "json"
+require "active_support/time"
+require "time"
+require "date"
 
 class SummaryController < ApplicationController
   def initialize
@@ -105,10 +108,10 @@ class SummaryController < ApplicationController
     end
 
     closest_event = nil
-    num_events_next_week = 0
+    num_events_last_week = 0
     events.each do |event|
-      if Range.new(Date.today, Date.today + 7).cover?(event["date"])
-        num_events_next_week += 1
+      if Range.new(Date.today, Date.today - 7).cover?(event["date"])
+        num_events_last_week += 1
       end
 
       if closest_event.nil?
@@ -127,6 +130,47 @@ class SummaryController < ApplicationController
     }
 
     result["next_closest_event"] = next_closest_event
-    result["num_events_next_week"] = num_events_next_week
+    result["num_events_last_week"] = num_events_last_week
+  end
+
+  def timezone_conversion
+    payload = {}
+    event_id = params['event']
+    user_id = params['user']
+    calendar_status_payload = @external_api_service.query_calendar_service(user_id)
+    if calendar_status_payload[0] == 404
+      Rails.logger.error("received 404 from calendar service")
+      errors.append(calendar_status_payload[1]["message"])
+      return
+    end
+    current_event = nil
+    calendar_status_payload[1]["events"].each do |event|
+      if event['id'] == event_id
+        # date = Date.strptime(event["date"], "%F %T %z")
+        Rails.logger.info("received datetime: #{event["date"]}")
+        # 8/14/2023, 4:00:27 AM
+        event["date"] = Time.strptime(event["date"], "%m/%d/%Y, %T %p")
+        current_event = event
+        break
+      end
+    end
+
+    user_status_payload = @external_api_service.query_user_service(user_id)
+    if user_status_payload[0] == 404
+      Rails.logger.error("received 404 from user service")
+      errors.append(user_status_payload[1]["message"])
+      return
+    end
+    user_info = user_status_payload[1]
+    user_tz = user_info['time_zone']
+    # tz = tzinfo::TimeZone.get(user_tz)
+    datetime_obj = current_event["date"].in_time_zone(user_tz)
+    current_event["date"] = datetime_obj.strftime("%m/%d/%Y, %T %p")
+    render json: {current_event: current_event}
   end
 end
+
+# datetime = Time.strptime(event["date"], "%m/%d/%Y, %T %p")
+# user_tz = user_info['time_zone']
+# datetime = datetime.in_time_zone(user_tz)
+# current_event["date"] = datetime.strftime("%m/%d/%Y, %T %p")
