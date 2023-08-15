@@ -1,10 +1,10 @@
 class UserController < ApplicationController
   USERS = [
-    {'id' => 1, 'first_name' => 'Michael', 'last_name' => 'Scott', 'position' => 'Regional Manager', 'role' => 'admin'},
-    {'id' => 2, 'first_name' => 'Jim', 'last_name' => 'Halpert', 'position' => 'Salesperson', 'role' => 'user'},
-    {'id' => 3, 'first_name' => 'Pam', 'last_name' => 'Beesly', 'position' => 'Receptionist', 'role' => 'user'},
-    {'id' => 4, 'first_name' => 'Dwight', 'last_name' => 'Schrute', 'position' => 'Salesperson', 'role' => 'user'},
-    {'id' => 5, 'first_name' => 'Angela', 'last_name' => 'Martin', 'position' => 'Accountant', 'role' => 'user'}
+    {'id' => 1, 'first_name' => 'Michael', 'last_name' => 'Scott', 'position' => 'Regional Manager', 'role' => 'admin', 'time_zone' => 'America/New_York'}, 
+    {'id' => 2, 'first_name' => 'Jim', 'last_name' => 'Halpert', 'position' => 'Salesperson', 'role' => 'user', 'time_zone' => 'America/Detroit'},
+    {'id' => 3, 'first_name' => 'Pam', 'last_name' => 'Beesly', 'position' => 'Receptionist', 'role' => 'user', 'time_zone' => 'America/Denver'},
+    {'id' => 4, 'first_name' => 'Dwight', 'last_name' => 'Schrute', 'position' => 'Salesperson', 'role' => 'user', 'time_zone' => 'America/Chicago'},
+    {'id' => 5, 'first_name' => 'Anglea', 'last_name' => 'Martin', 'position' => 'Accountant', 'role' => 'user', 'time_zone' => 'America/Los_Angeles'},
   ]
 
   def show
