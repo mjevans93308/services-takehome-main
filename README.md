@@ -1,6 +1,6 @@
 # Engineering Take Home Exercise
 
-Welcome to the Calendly Take Home assignment! This execise will focus on a Service Oriented Architecture (SOA) exercise.
+Welcome to the <redacted> Take Home assignment! This execise will focus on a Service Oriented Architecture (SOA) exercise.
 
 # Getting Started
 
